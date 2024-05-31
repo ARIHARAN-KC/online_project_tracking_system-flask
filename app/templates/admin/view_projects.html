@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+{% block title %}View Projects{% endblock %}
+
+{% block content %}
+
+<style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    animation: fadeIn 0.5s ease;
+  }
+
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+
+  th {
+    background-color: #f2f2f2;
+    color: #333;
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  tbody tr:hover {
+    background-color: #ddd;
+  }
+
+  button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    font-size: 14px;
+  }
+
+  button:hover {
+    background-color: #ff0000;
+    color: #fff;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .search-container {
+    margin-bottom: 20px;
+    float: right;
+  }
+
+  .search-container input[type=text] {
+    padding: 12px;
+    margin-top: 8px;
+    font-size: 16px;
+    border: none;
+    border-bottom: 1px solid #ddd;
+    width: 300px;
+  }
+
+  .search-container input[type=text]:focus {
+    outline: none;
+  }
+
+  .search-container button {
+    padding: 12px 20px;
+    margin-top: 8px;
+    margin-left: 10px;
+    background: #007bff;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+  }
+
+  .search-container button:hover {
+    background: #0056b3;
+  }
+
+  .edit-description,
+  .cancel-edit {
+    font-size: 14px;
+    padding: 6px 12px;
+    margin-right: 6px;
+  }
+
+  .edit-description {
+    color: #007bff;
+  }
+
+  .edit-description:hover {
+    color: #0056b3;
+    text-decoration: underline;
+  }
+
+  .cancel-edit {
+    color: #6c757d;
+  }
+
+  .cancel-edit:hover {
+    color: #343a40;
+    text-decoration: underline;
+  }
+</style>
+
+<h1 class="text-center">Projects</h1>
+
+<div class="search-container">
+  <form action="{{ url_for('admin_view_projects') }}" method="GET">
+    <input type="text" placeholder="Search for project..." name="search">
+    <button type="submit">Search</button>
+  </form>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Project ID</th>
+            <th>Project Name</th>
+            <th>Start Date - End Date</th>
+            <th>Notice</th>
+            <th>Assigned Guide</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for project in projects %}
+        <tr class="fade-in">
+            <td>{{ project.id }}</td>
+            <td><strong>{{ project.name }}</strong></td>
+            <td><em>{{ project.start_date.strftime('%Y-%m-%d') }} - {{ project.end_date.strftime('%Y-%m-%d') }}</em></td>
+            <td class="description">
+                <div id="description-{{ project.id }}">
+                    {{ project.description }}
+                </div>
+                <form id="edit-form-{{ project.id }}" style="display: none;" action="{{ url_for('admin_edit_project_description', project_id=project.id) }}" method="POST">
+                    {{ form.csrf_token }}
+                    <textarea name="description" class="form-control" rows="3">{{ project.description }}</textarea>
+                    <br>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary cancel-edit" data-project-id="{{ project.id }}">Cancel</button>
+                </form>
+                <button type="button" class="btn btn-link edit-description" data-project-id="{{ project.id }}">Edit</button>
+            </td>
+            <td>
+                {% if project.assigned_guide_name %}
+                    <span class="guide-name">{{ project.assigned_guide_name }}</span>
+                {% endif %}
+            </td>
+            <td>{{ project.status }}</td> 
+            <td>
+                {% if project.assigned_guide_name %}
+                    <a href="{{ url_for('view_project_tasks', project_id=project.id) }}" class="btn btn-primary">View</a>
+                {% else %}
+                    <form action="{{ url_for('admin_assign_project') }}" method="POST">
+                        {{ form.csrf_token }}
+                        <input type="hidden" name="project_id" value="{{ project.id }}">
+                        <button type="submit" class="btn btn-primary">Assign</button>
+                    </form>
+                {% endif %}
+            </td>
+            <td>
+                <form action="{{ url_for('admin_remove_project', project_id=project.id) }}" method="POST">
+                    {{ form.hidden_tag() }}
+                    <button type="submit" class="btn btn-danger">Remove</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add event listeners for edit description buttons
+        document.querySelectorAll('.edit-description').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var projectId = this.getAttribute('data-project-id');
+                document.getElementById('description-' + projectId).style.display = 'none';
+                document.getElementById('edit-form-' + projectId).style.display = 'block';
+            });
+        });
+
+        // Add event listeners for cancel edit buttons
+        document.querySelectorAll('.cancel-edit').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var projectId = this.getAttribute('data-project-id');
+                document.getElementById('description-' + projectId).style.display = 'block';
+                document.getElementById('edit-form-' + projectId).style.display = 'none';
+            });
+        });
+    });
+</script>
+{% endblock %}

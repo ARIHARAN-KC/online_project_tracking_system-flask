@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease; /* Add animation */
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            animation: slideInDown 0.5s ease; /* Add animation */
+        }
+
+        @keyframes slideInDown {
+            from {
+                transform: translateY(-50%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        select,
+        input[type="date"],
+        button[type="submit"] {
+            width: 100%; /* Set all form elements to have 100% width */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box; /* Ensure padding and border are included in the width */
+        }
+        
+        button[type="submit"] {
+            background-color: #007bff; /* Change background color to blue */
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            animation: pulse 1s infinite alternate; /* Add animation */
+        }
+
+
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+            }
+            to {
+                transform: scale(1.1);
+            }
+        }
+
+        button[type="submit"]:hover {
+            background-color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Assign Project</h1>
+        <form method="POST" action="{{ url_for('admin_assign_project') }}">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                <label for="project_id">Select Project:</label>
+                <select name="project_id">
+                    {% for project in projects %}
+                    <option value="{{ project.id }}">{{ project.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="guide_id">Select Guide:</label>
+                <select name="guide_id">
+                    {% for guide in guides %}
+                    <option value="{{ guide.id }}">{{ guide.username }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="team_leader_id">Select Team Leader(Student1):</label>
+                <select name="team_leader_id">
+                    {% for student in students %}
+                    <option value="{{ student.id }}">{{ student.username }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="student1_id">Select Student 2:</label>
+                <select name="student1_id">
+                    {% for student in students %}
+                    <option value="{{ student.id }}">{{ student.username }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="student2_id">Select Student 3:</label>
+                <select name="student2_id">
+                    {% for student in students %}
+                    <option value="{{ student.id }}">{{ student.username }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="student3_id">Select Student 4:</label>
+                <select name="student3_id">
+                    {% for student in students %}
+                    <option value="{{ student.id }}">{{ student.username }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="student4_id">Select Student 5:</label>
+                <select name="student4_id">
+                    {% for student in students %}
+                    <option value="{{ student.id }}">{{ student.username }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="start_date">Start Date:</label>
+                <input type="date" name="start_date">
+            </div>
+            <div class="form-group">
+                <label for="end_date">End Date:</label>
+                <input type="date" name="end_date">
+            </div>
+            <button type="submit">Assign Project</button>
+        </form>
+    </div>
+</body>
+</html>

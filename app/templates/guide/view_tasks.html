@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Tasks</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            background-color: #343a40;
+            color: #ffffff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+            /* Align items vertically */
+        }
+
+        .nav-links li {
+            margin-left: 20px;
+            display: flex;
+            /* Ensure flex properties apply to list items */
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #ffffff;
+            /* Set all links to white color */
+            display: block;
+            /* Make links take up full width of their parent */
+            padding: 10px;
+            transition: background-color 0.3s;
+            border-radius: 5px;
+        }
+
+        .nav-links a:hover {
+            background-color: #495057;
+        }
+
+        .dropdown-menu {
+            background-color: #ffffff;
+            border: 1px solid #343a40;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .dropdown-menu a.dropdown-item {
+            color: #333;
+            padding: 10px 20px;
+            transition: background-color 0.3s;
+        }
+
+        .dropdown-menu a.dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        .assigned-projects {
+            margin-top: 20px;
+        }
+
+        .project {
+            border: 2px solid #009879;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+            max-width: 400px;
+            /* Adjust the maximum width as needed */
+        }
+
+        .project h3 {
+            color: #616e6c;
+            margin-top: 0;
+        }
+
+        .project p {
+            margin: 5px 0;
+        }
+
+        .title {
+            background-color: #676d74;
+            color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+
+        .title h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .extra-points {
+            background-color: #f0f0f0;
+            color: #333333;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .extra-points h2 {
+            color: #343a40;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .extra-points ul {
+            list-style-type: disc;
+            margin-left: 20px;
+            margin-bottom: 0;
+        }
+
+        .extra-points li {
+            margin-bottom: 10px;
+        }
+
+        .btn-print {
+            margin-bottom: 20px;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .print-container, .print-container * {
+                visibility: visible;
+            }
+            .print-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+            .btn-print, .btn-delete {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a class="navbar-brand text-white" href="#">Project Tracking System</a>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('guide_projects') }}">Assigned Projects</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownProjects" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        Tasks
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownProjects">
+                        <a class="dropdown-item" href="{{ url_for('guide_view_tasks', project_id=project_id) }}">View Tasks</a>
+                        <a class="dropdown-item" href="{{ url_for('guide_add_task', project_id=project_id) }}">Add Tasks</a>
+                    </div>
+                </li>
+                <li><a href="{{ url_for('guide_generate_task_timeline_chart', project_id=project_id) }}">TimeLine Chart</a></li>
+                <li><a href="{{ url_for('guide_view_students') }}">Students</a></li>
+                <li><a href="{{ url_for('guide_change_password') }}">Change Password</a></li>
+                <li><a href="{{ url_for('guide_logout') }}">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Tasks</h1>
+        <button class="btn btn-primary btn-print" onclick="window.print()">Print </button>
+        <div class="row print-container">
+            {% for task in tasks %}
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title task-name">{{ task.name }}</h5>
+                        <p class="card-text task-details">{{ task.description }}</p>
+                        <p class="card-text deadline"><strong>Deadline:</strong> {{ task.deadline }}</p>
+                        <p class="card-text start-end-date"><strong>Start Date:</strong> {{ task.start_date }} - <strong>Completed Date:</strong> {{ task.end_date }}</p>
+                        <p class="card-text task-status"><strong>Status:</strong> {{ task.task_status }}</p>
+                        <form action="{{ url_for('guide_delete_task', task_id=task.id, project_id=task.project_id) }}" method="post">
+                            {{ form.hidden_tag() }}
+                            <button type="submit" class="btn btn-danger btn-sm btn-delete">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

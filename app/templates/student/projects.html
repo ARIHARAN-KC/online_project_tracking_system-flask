@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Project</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .container {
+            padding: 20px;
+        }
+        .card {
+            background-color: #f9f9f9;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .card h2 {
+            margin-top: 0;
+        }
+        .card p {
+            margin-bottom: 0;
+        }
+        /* Add style for URL links */
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 10px; /* Add some space between links */
+        }
+        
+        .assigned-projects {
+            margin-top: 20px;
+        }
+    
+        .project {
+            border: 2px solid #009879;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+            max-width: 400px; /* Adjust the maximum width as needed */
+        }
+    
+        .project h3 {
+            color: #009879;
+            margin-top: 0;
+        }
+    
+        .project p {
+            margin: 5px 0;
+        }
+        
+        .top-right-menu {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            margin: 20px;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    
+        .top-right-menu a {
+            margin-left: 10px;
+            color: #009879;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div>
+            <h1>Student Project</h1>
+        </div>
+        <div>
+            <a href="{{ url_for('student_projects') }}">Project</a>
+            <a href="{{ url_for('student_update_status', project_id=project_id) }}">Update status</a>
+            <a href="{{ url_for('student_view_tasks', project_id=project_id) }}">Tasks</a>
+            <a href="{{ url_for('student_change_password') }}">Change Password</a>
+            <a href="{{ url_for('student_logout') }}">Logout</a>
+        </div>
+    </div>
+   
+    <!-- Assigned Projects Template -->
+    <div class="assigned-projects">
+        <h1>Assigned Projects</h1>
+        {% for project in assigned_projects %}
+        <div class="project">
+            <h3><a href="{{ url_for('add_comment', project_id=project.project_id) }}">{{ project.project_name }}</a></h3>
+            <p><strong>Guide ID:</strong> {{ project.guide_id }}</p>
+            <p><strong>Team Leader ID(Student 1):</strong> {{ project.team_leader_id }}</p>
+            <p><strong>Student 2 ID:</strong> {{ project.student1_id }}</p>
+            <p><strong>Student 3 ID:</strong> {{ project.student2_id }}</p>
+            <p><strong>Student 4 ID:</strong> {{ project.student3_id }}</p>
+            <p><strong>Student 5 ID:</strong> {{ project.student4_id }}</p>
+            <p><strong>Start Date:</strong> {{ project.start_date }}</p>
+            <p><strong>End Date:</strong> {{ project.end_date }}</p>
+            <a href="{{ url_for('student_update_status', project_id=project.project_id) }}">Update status</a>
+
+
+        </div>
+        {% endfor %}
+    </div>
+
+    
+</body>
+</html>

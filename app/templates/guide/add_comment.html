@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <!-- Custom CSS -->
+    <style>
+        /* Global styles */
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+        }
+
+        /* Header styles */
+        .header {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        /* Project details card */
+        .project-card {
+            background-color: #f8f9fa;
+            border: 2px solid #007bff;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .project-card p {
+            margin: 10px 0;
+        }
+
+        /* Discussion form */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .btn-submit {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+
+        /* Comments section */
+        .comments-section {
+            margin-top: 50px;
+        }
+        .comment-item {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .comment-item strong {
+            font-weight: bold;
+        }
+
+        /* Animation classes */
+        .animated {
+            animation-duration: 1s;
+            animation-fill-mode: both;
+        }
+        .fadeInDown {
+            animation-name: fadeInDown;
+        }
+        .fadeInUp {
+            animation-name: fadeInUp;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center mt-5 mb-4 animated fadeInDown">Project Details</h2>
+        <!-- Highlighted project details section -->
+        <div class="card p-4 mb-4 animated fadeInUp" style="background-color: #f8f9fa; border: 2px solid #007bff;">
+            <p><strong>Project Name:</strong> {{ project.name }}</p>
+            <p><strong>Notice:</strong> {{ project.description }}</p>
+        </div>
+        <!-- End of highlighted project details section -->
+
+        <h1 class="text-center mb-4 animated fadeInDown">Discussion Area</h1>
+        <form method="POST" action="{{ url_for('add_comment', project_id=project.id) }}" class="animated fadeInUp">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.display_name.label }}: {{ form.display_name(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.content.label }}: {{ form.content(class="form-control") }}
+            </div>
+            <button type="submit" class="btn btn-submit">Submit</button>
+        </form>
+
+        <h2 class="text-center mb-4 animated fadeInDown">Comments</h2>
+        <ul class="list-unstyled">
+            {% for comment in comments %}
+            <li class="comment-item animated fadeInUp">
+                <strong>{{ comment.displayName }}</strong>: {{ comment.content }}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Bootstrap JS (optional) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

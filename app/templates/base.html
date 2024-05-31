@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Project Tracking{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom CSS styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa; /* Light gray background */
+            min-height: 100vh; /* Set the body to at least the height of the viewport */
+            position: relative; /* Set body to relative position */
+        }
+        
+        .navbar {
+            background-color: #343a40 !important; /* Dark gray navbar */
+        }
+        .navbar-brand {
+            color: #ffffff !important; /* White navbar text */
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        .navbar-brand img {
+            max-height: 40px; /* Adjust height as needed */
+            margin-right: 10px; /* Add margin for spacing */
+        }
+        .navbar-nav .nav-link {
+            color: #ffffff !important; /* White navbar links */
+            font-weight: bold;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #adb5bd !important; /* Light gray on hover */
+        }
+        main {
+            background-color: #ffffff; /* White main content area */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Box shadow for depth */
+            margin-top: 20px;
+            margin-bottom: 10px; /* Adjust bottom margin to accommodate footer */
+        }
+        h1 {
+            color: #343a40; /* Dark gray heading */
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #6c757d; /* Gray text */
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        .title {
+            background-color: #b4b7b9;
+            color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        footer {
+            position: absolute; /* Set footer to absolute position */
+            bottom: 0; /* Align footer to the bottom of the viewport */
+            left: 0; /* Align footer to the left side of the viewport */
+            width: 100%; /* Set footer width to 100% */
+            background-color: #343a40; /* Dark gray footer */
+            color: #ffffff; /* White text */
+            padding: 5px; /* Reduced padding */
+            text-align: center;
+            font-size: 0.8rem; /* Reduced font size */
+        }
+        .extra-points {
+            background-color: #f0f0f0;
+            color: #333333;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        .extra-points h2 {
+            color: #343a40;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        .extra-points ul {
+            list-style-type: disc;
+            margin-left: 20px;
+            margin-bottom: 0;
+        }
+        .extra-points li {
+            margin-bottom: 10px;
+        }
+    </style>
+    
+    
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">
+        Project Tracking System
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+            {% if not session.loggedin %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/login">Admin Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/guide/login">Guide Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/student/login">Student Login</a>
+                </li>
+            {% endif %}
+            {% if session.loggedin %}
+                <li class="nav-item">
+                    <div class="dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownGuides" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Guides
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownGuides">
+                            <a class="dropdown-item" href="{{ url_for('admin_view_guides') }}">View Guides</a>
+                            <a class="dropdown-item" href="{{ url_for('admin_register_guide') }}">Add Guide</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownProjects" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Projects
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownProjects">
+                            <a class="dropdown-item" href="{{ url_for('admin_view_projects') }}">View Projects</a>
+                            <a class="dropdown-item" href="{{ url_for('admin_add_project') }}">Add Projects</a>
+                        </div>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <div class="dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownStudents" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Students
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownStudents">
+                            <a class="dropdown-item" href="{{ url_for('admin_view_students') }}">View Students</a>
+                            <a class="dropdown-item" href="{{ url_for('admin_register_student') }}">Add Student</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('generate_project_report') }}">Reports</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('admin_logout') }}">Logout</a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+{% block content %}
+<main>
+    <div class="container project-tracker-container">
+        <div class="title">
+            <h1>Welcome to Project Tracking System</h1>
+            <p> You can log in as an admin, guide, or student using the links in the navigation bar above. If you are already logged in, you can navigate to various sections using the dropdown menus.</p>
+        </div>
+        <div class="extra-points">
+            <h2>Extra Points</h2>
+            <ul>
+                <li>Track project progress in real-time.</li>
+                <li>Assign tasks and deadlines to team members.</li>
+                <li>Generate reports and visualizations for project analysis.</li>
+                <li>Collaborate with team members through integrated chat and messaging features.</li>
+            </ul>
+        </div>
+    </div>
+</main>
+{% endblock %}
+<div class="container mt-4">
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+</div>
+
+<footer>
+    <div class="container">
+        <p>Project Tracking System &copy; Ariharan 2024. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

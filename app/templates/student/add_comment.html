@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center mt-5 mb-4 animated fadeInDown">Project Details</h2>
+        <div class="card p-3 mb-4 animated fadeInUp">
+            <p>Project Name: {{ project.name }}</p>
+            <p>Description: {{ project.description }}</p>
+        </div>
+        <h1 class="text-center mb-4 animated fadeInDown">Add Comment</h1>
+        <form method="POST" action="{{ url_for('add_comment', project_id=project.id) }}" class="animated fadeInUp">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.display_name.label }}: {{ form.display_name(class="form-control") }}
+            </div>
+            <div class="form-group">
+                {{ form.content.label }}: {{ form.content(class="form-control") }}
+            </div>
+            <button type="submit" class="btn btn-submit">Submit</button>
+        </form>
+
+        
+
+        <h2 class="text-center mb-4 animated fadeInDown">Comments</h2>
+        <ul class="list-unstyled">
+            {% for comment in comments %}
+            <li class="comment-item animated fadeInUp">
+                <strong>{{ comment.displayName }}</strong> : {{ comment.content }}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Bootstrap JS (optional) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+<style>
+/* Reset default browser styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Example custom styles */
+body {
+    background-color: #e5ddd5; /* WhatsApp background color */
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-control {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    width: 100%;
+}
+
+.btn-submit {
+    background-color: #25D366; /* WhatsApp Green */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.btn-submit:hover {
+    background-color: #128C7E; /* Darker shade of WhatsApp Green */
+}
+
+.comment-item {
+    background-color: #DCF8C6; /* Light Green for received messages */
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.comment-item strong {
+    font-weight: bold;
+}
+
+/* Example animation classes */
+.animated {
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+}
+
+.fadeInDown {
+    animation-name: fadeInDown;
+}
+
+.fadeInUp {
+    animation-name: fadeInUp;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* WhatsApp chat bubble styles */
+.comment-item {
+    max-width: 70%;
+    margin-left: auto;
+    border-radius: 20px;
+    padding: 10px 15px;
+    word-wrap: break-word;
+}
+
+.sent-message {
+    background-color: #DCF8C6; /* Light Green for sent messages */
+    margin-left: auto;
+}
+
+.received-message {
+    background-color: #fff; /* White for received messages */
+    margin-right: auto;
+}
+
+.chat-bubble strong {
+    font-weight: bold;
+}
+
+
+</style>
+</html>

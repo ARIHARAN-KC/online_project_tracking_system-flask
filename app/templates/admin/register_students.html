@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Add Student{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm animated fadeInUp">
+        <div class="card-body">
+            <h2 class="card-title">Register Student</h2>
+            <form method="POST">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.id.label(class="form-label") }}
+                    {{ form.id(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.username.label(class="form-label") }}
+                    {{ form.username(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.email.label(class="form-label") }}
+                    {{ form.email(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.password.label(class="form-label") }}
+                    {{ form.password(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    {{ form.confirm_password.label(class="form-label") }}
+                    {{ form.confirm_password(class="form-control") }}
+                </div>
+                <button type="submit" class="btn btn-primary btn-register">Register</button>
+                <a href="{{ url_for('upload_student_csv') }}" class="btn btn-link">Upload CSV</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

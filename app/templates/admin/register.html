@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    form {
+        width: 50%;
+        margin: 0 auto;
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        position: relative; /* Make the form container relative */
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+        animation: fadeInUp 0.5s ease;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    div {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        color: #555;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        transition: border-color 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+
+    input[type="submit"] {
+        background-color: #007bff; /* Light Button Color */
+        color: #333; /* Text Color */
+        border: 1px solid #ccc; /* Border */
+        padding: 12px 20px;
+        font-size: 1em;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        width: 100%;
+        position: relative; /* Make the submit button container relative */
+    }
+
+    input[type="submit"]:hover {
+        background-color: #e5e5e5; /* Light Button Hover Color */
+    }
+/* Add light border style */
+form::before,
+form::after {
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border: 2px solid transparent; /* Initial transparent border */
+    border-radius: 12px;
+    pointer-events: none;
+    animation: lightBorderAnimation 3s infinite alternate;
+}
+
+@keyframes darkBorderAnimation {
+        0%, 100% {
+            border-color: rgba(0, 123, 255, 0.5); /* Start and end with a light blue border */
+        }
+        50% {
+            border-color: rgba(86, 192, 160, 0.5); /* Transition to a dark blue border */
+        }
+    }
+
+</style>
+<div class="form-container">
+    <h2>Admin Registration</h2>
+    <form action="{{ url_for('admin_register') }}" method="POST">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.username.label }}
+            {{ form.username(size=20, class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.email.label }}
+            {{ form.email(size=20, class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.password.label }}
+            {{ form.password(size=20, class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.confirm_password.label }}
+            {{ form.confirm_password(size=20, class="form-control") }}
+        </div>
+        <div class="form-group">
+            {{ form.submit() }}
+        </div>
+    </form>
+</div>
+{% endblock %}

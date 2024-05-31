@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <style>
+        /* Styles for headings */
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            color: #555;
+            font-size: 20px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        /* Styles for comments */
+        .comment-item {
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        /* Animation styles */
+        .animated {
+            animation-duration: 0.5s;
+        }
+
+        .fadeInDown {
+            animation-name: fadeInDown;
+        }
+
+        .fadeInUp {
+            animation-name: fadeInUp;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translate3d(0, -100%, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translate3d(0, 100%, 0);
+            }
+
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ project.name }}</h1>
+    <p>{{ project.description }}</p>
+    
+    <h2 class="animated fadeInDown">Comments</h2>
+    <ul class="list-unstyled">
+        {% for comment in comments %}
+        <li class="comment-item animated fadeInUp">
+            <strong>{{ comment.displayName }}</strong> : {{ comment.content }}
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

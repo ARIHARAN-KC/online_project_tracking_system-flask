@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Timeline Chart</title>
+    
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background-color: #495057;
+            padding: 10px 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar-brand {
+            color: white;
+            font-size: 1.5em;
+            text-decoration: none;
+        }
+        .nav-links {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        .nav-links li {
+            padding: 0 10px;
+        }
+        .nav-links li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1em;
+        }
+        
+        .dropdown-menu {
+            background-color: #ffffff;
+            border: 1px solid #343a40;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: none;
+            font-size: 1rem;
+            list-style: none;
+            min-width: 10rem;
+            padding: .5rem 0;
+            position: absolute;
+            text-align: left;
+            z-index: 1000;
+            left: auto;
+        }
+
+        .dropdown-menu a.dropdown-item {
+            color: #333;
+            padding: 10px 20px;
+            transition: background-color 0.3s;
+            display: block;
+            width: 100%;
+            clear: both;
+            font-weight: 400;
+            color: #212529;
+            text-align: inherit;
+            white-space: nowrap;
+            background-color: transparent;
+            border: 0;
+        }
+
+        .dropdown-menu a.dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #timeline_chart {
+            width: 80%;
+            margin: auto;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a class="navbar-brand" href="#">Project Tracking System</a>
+            <ul class="nav-links"><ul class="nav-links">
+                <li><a href="{{ url_for('guide_projects') }}">Assigned Projects</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownProjects" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        Tasks
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownProjects">
+                        <a class="dropdown-item" href="{{ url_for('guide_view_tasks', project_id=project_id) }}">View Tasks</a>
+                        <a class="dropdown-item" href="{{ url_for('guide_add_task', project_id=project_id) }}">Add Tasks</a>
+                    </div>
+                </li>
+                <li><a href="{{ url_for('guide_generate_task_timeline_chart', project_id=project_id) }}">TimeLine Chart</a></li>
+                <li><a href="{{ url_for('guide_view_students') }}">Students</a></li>
+                <li><a href="{{ url_for('guide_change_password') }}">Change Password</a></li>
+                <li><a href="{{ url_for('guide_logout') }}">Logout</a></li>
+            </ul>
+            </ul>
+        </div>
+    </nav>
+
+    <h1>Task Timeline Chart</h1>
+    <div id="timeline_chart"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function(event) {
+            var dropdown = document.querySelector('.dropdown-toggle');
+            dropdown.addEventListener('click', function() {
+                var menu = document.getElementById('tasksDropdown');
+                if (menu.style.display === "none" || menu.style.display === "") {
+                    menu.style.display = "block";
+                } else {
+                    menu.style.display = "none";
+                }
+            });
+        });
+
+        var task_data = {{ task_data | tojson | safe }};
+        var task_names = [];
+        var start_dates = [];
+        var end_dates = [];
+        var colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'];
+
+        for (var i = 0; i < task_data.length; i++) {
+            task_names.unshift(task_data[i].name);
+            start_dates.unshift(task_data[i].start_date);
+            end_dates.unshift(task_data[i].end_date);
+        }
+
+        var traces = [];
+        var prevEndDate = new Date();
+        for (var i = 0; i < task_names.length; i++) {
+            var startDate = new Date(start_dates[i]);
+            var endDate = new Date(end_dates[i]);
+            if (startDate < prevEndDate) {
+                startDate = prevEndDate;
+            }
+            prevEndDate = endDate;
+
+            var trace1 = {
+                y: [task_names[i]],
+                x: [startDate],
+                xaxis: 'x',
+                yaxis: 'y',
+                type: 'bar',
+                orientation: 'h',
+                marker: {color: 'rgba(0,0,0,0)'},
+                showlegend: false
+            };
+
+            var trace2 = {
+                y: [task_names[i]],
+                x: [endDate - startDate],
+                xaxis: 'x',
+                yaxis: 'y',
+                type: 'bar',
+                orientation: 'h',
+                marker: {color: colors[i % colors.length]},
+                name: task_names[i]
+            };
+
+            traces.push(trace1, trace2);
+        }
+
+        var data = traces;
+
+        var layout = {
+            title: 'Task Timeline Chart',
+            xaxis: {type: 'date', title: 'Date'},
+            yaxis: {title: 'Task Name'},
+            barmode: 'stack'
+        };
+
+        Plotly.newPlot('timeline_chart', data, layout);
+    </script>
+</body>
+</html>

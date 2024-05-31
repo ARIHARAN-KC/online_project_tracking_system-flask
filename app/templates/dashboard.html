@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+      font-size: 2.5rem;
+    }
+    .project-count {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 40px; /* Increased margin for more space */
+    }
+    .project-count div {
+      background-color: #fdfdfd;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      text-align: center;
+      width: 30%;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      margin-bottom: 20px; /* Added margin between boxes */
+    }
+    .completed {
+      background-color: #28a745; /* Green for completed projects */
+    }
+    .in-process {
+      background-color: #fd7e14; /* Orange for in-process projects */
+    }
+    .stuck {
+      background-color: #dc3545; /* Red for stuck projects */
+    }
+    .project-count div:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    .project-count h2 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: #b63b3b; /* Text color for project count */
+    }
+    .project-count p {
+      font-size: 1.2rem;
+      margin-top: 0;
+      color: #060707; /* Text color for project count */
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      animation: fadeIn 0.5s ease;
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    button {
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 12px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    button:active {
+      transform: translateY(1px);
+    }
+    .nav-items {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-items li {
+      display: inline-block;
+      margin-left: 10px;
+    }
+    .nav-items li a {
+      color: #333;
+      text-decoration: none;
+    }
+    .nav-items li a:hover {
+      color: #007bff;
+    }
+    .top-right-menu {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
+<h1>Dashboard</h1>
+<div class="project-count">
+  <div class="completed">
+    <h2>{{ completed_projects }}</h2>
+    <p>Completed Projects</p>
+  </div>
+  <div class="in-process">
+    <h2>{{ in_process_projects }}</h2>
+    <p>In-Process Projects</p>
+  </div>
+  <div class="stuck">
+    <h2>{{ stuck_projects }}</h2>
+    <p>Stuck Projects</p>
+  </div>
+</div>
+{% endblock %}
+  
+

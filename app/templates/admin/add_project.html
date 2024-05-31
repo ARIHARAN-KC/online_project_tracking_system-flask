@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Add Project{% endblock %}
+
+{% block content %}
+<style>
+    /* Custom CSS for card */
+    .card {
+        border-radius: 10px; /* Rounded corners */
+        border: 1px solid #ced4da; /* Border color */
+        margin-bottom: 10px; /* Reduced bottom margin */
+    }
+    .card-body {
+        padding: 15px; /* Reduced padding inside the card body */
+    }
+    .card-title {
+        font-size: 1.3rem; /* Reduced title font size */
+        margin-bottom: 10px; /* Reduced bottom margin for the title */
+    }
+    .form-label {
+        font-weight: bold; /* Bold form labels */
+    }
+    .form-control {
+        margin-bottom: 10px; /* Reduced bottom margin for form controls */
+    }
+    .btn-register {
+        margin-top: 10px; /* Reduced top margin for the register button */
+    }
+    .btn-link {
+        color: #007bff; /* Link color */
+    }
+    .btn-link:hover {
+        text-decoration: none; /* Remove underline on hover */
+    }
+</style>
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">Add Project</h1>
+                <form method="POST" class="project-form">
+                    {{ form.hidden_tag() }}
+                    <div class="form-group">
+                        <label for="name" class="form-label">Project Name:</label>
+                        {{ form.name(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        <label for="description" class="form-label">Notice:</label>
+                        {{ form.description(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        <label for="start_date" class="form-label">Start Date:</label>
+                        <input type="date" name="start_date" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="end_date" class="form-label">End Date:</label>
+                        {{ form.end_date(class="form-control") }}
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-submit">Add Project</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Tasks</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background-color: #f0f0f0;
+        }
+
+        .top-right-menu {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .top-right-menu a {
+            padding: 10px;
+            text-decoration: none;
+            color: black;
+            background-color: lightgray;
+            border-radius: 5px;
+            margin-right: 5px;
+        }
+
+        .top-right-menu a:hover {
+            background-color: darkgray;
+        }
+
+        .navbar {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        .card {
+            background-color: #f9f9f9;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            margin-top: 0;
+        }
+
+        .card p {
+            margin-bottom: 0;
+        }
+
+        /* Add style for URL links */
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 10px; /* Add some space between links */
+        }
+    </style>
+</head>
+<body>
+    <div class="top-right-menu">
+        <a href="{{ url_for('student_projects') }}">Project</a>
+        <a href="{{ url_for('student_update_status', project_id=project_id) }}">Update status</a>
+        <a href="{{ url_for('student_view_tasks', project_id=project_id) }}">Tasks</a>
+        <a href="{{ url_for('student_change_password') }}">Change Password</a>
+        <a href="{{ url_for('student_logout') }}">Logout</a>
+    </div>
+    <h1>Tasks</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Task Name</th>
+                <th>Description</th>
+                <th>Deadline</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+            <tr>
+                <td><strong>{{ task.name }}</strong></td>
+                <td>{{ task.description }}</td>
+                <td>{{ task.deadline }}</td>
+                <td>
+                    <form action="{{ url_for('student_update_task_status', project_id=project_id, task_id=task.id) }}" method="post">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <select name="status" {% if task.status == 'Completed' %} disabled {% endif %}>
+                            <option value="Pending" {% if task.status == 'Pending' %} selected {% endif %}>Pending</option>
+                            <option value="In Progress" {% if task.status == 'In Progress' %} selected {% endif %}>In Progress</option>
+                            <option value="Completed" {% if task.status == 'Completed' %} selected {% endif %}>Completed</option>
+                        </select>
+                        <button type="submit" {% if task.status == 'Completed' %} disabled {% endif %}>Update Status</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

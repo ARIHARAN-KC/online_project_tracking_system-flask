@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    /* Additional styles for the Upload Guide CSV form */
+    .container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        animation: fadeInUp 0.5s ease;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    input[type="file"] {
+        display: block;
+        margin-top: 5px;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        background-color: #007bff;
+        border: none;
+        color: #fff;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+
+    .btn-primary {
+        background-color: #0056b3;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .alert {
+        color: #155724;
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+        position: relative;
+        padding: 0.75rem 1.25rem;
+        margin-bottom: 1rem;
+        border: 1px solid transparent;
+        border-radius: 0.25rem;
+    }
+</style>
+
+<div class="container">
+    <h1 class="text-center mb-4">File Upload</h1>
+    <form method="post" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            <label for="file">Select CSV File:</label>
+            <input type="file" id="file" name="file" class="form-control">
+        </div>
+        <input type="submit" value="Upload" class="btn btn-primary btn-block">
+    </form>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="alert">
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    {% endwith %}
+</div>
+{% endblock %}

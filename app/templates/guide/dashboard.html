@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .navbar {
+            background-color: #343a40;
+            color: #ffffff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            align-items: center; /* Align items vertically */
+        }
+        .nav-links li {
+            margin-left: 20px;
+            display: flex; /* Ensure flex properties apply to list items */
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #ffffff; /* Set all links to white color */
+            display: block; /* Make links take up full width of their parent */
+            padding: 10px;
+            transition: background-color 0.3s;
+            border-radius: 5px;
+        }
+        .nav-links a:hover {
+            background-color: #495057;
+        }
+        .dropdown-menu {
+            background-color: #ffffff;
+            border: 1px solid #343a40;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .dropdown-menu a.dropdown-item {
+            color: #333;
+            padding: 10px 20px;
+            transition: background-color 0.3s;
+        }
+        .dropdown-menu a.dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 20px;
+        }
+        .title {
+            background-color: #676d74;
+            color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .title h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        .extra-points {
+            background-color: #f0f0f0;
+            color: #333333;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        .extra-points h2 {
+            color: #343a40;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        .extra-points ul {
+            list-style-type: disc;
+            margin-left: 20px;
+            margin-bottom: 0;
+        }
+        .extra-points li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>Guide Dashboard</h1>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('guide_projects') }}">Assigned Projects</a></li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownProjects" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Tasks
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownProjects">
+                    <a class="dropdown-item" href="{{ url_for('guide_view_tasks', project_id=project_id) }}">View Tasks</a>
+                    <a class="dropdown-item" href="{{ url_for('guide_add_task', project_id=project_id) }}">Add Tasks</a>
+                </div>
+            </li>
+            <li><a href="{{ url_for('guide_generate_task_timeline_chart', project_id=project_id) }}">TimeLine Chart</a></li>
+            <li><a href="{{ url_for('guide_view_students') }}">Students</a></li>
+            <li><a href="{{ url_for('guide_change_password') }}">Change Password</a></li>
+            <li><a href="{{ url_for('guide_logout') }}">Logout</a></li>
+        </ul>
+    </div>
+    <main>
+        <div class="container">
+            <div class="title">
+                <h1>Welcome, {{ session.username }}</h1>
+                <p>For viewing your assigned project, click "Assigned Projects".</p>
+            </div>
+            <div class="extra-points">
+                <h2>Extra Points</h2>
+                <ul>
+                    <li>Track task progress in real-time.</li>
+                    <li>Assign tasks and deadlines to team members.</li>
+                    <li>Generate reports and visualizations for project analysis.</li>
+                    <li>Collaborate with team members through integrated chat and messaging features.</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

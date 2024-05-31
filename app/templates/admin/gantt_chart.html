@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Gantt Chart</h2>
+  <div id="gantt_chart"></div>
+  <script>
+    google.charts.load('current', {'packages':['gantt']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('string', 'Task');
+      data.addColumn('date', 'Start Date');
+      data.addColumn('date', 'End Date');
+
+      data.addRows([
+        {% for item in gantt_chart_data %}
+          ['{{ item.Task }}', new Date('{{ item.Start }}'), new Date('{{ item.End }}')],
+        {% endfor %}
+      ]);
+
+      var options = {
+        height: 400
+      };
+
+      var chart = new google.visualization.Gantt(document.getElementById('gantt_chart'));
+
+      chart.draw(data, options);
+    }
+  </script>
+{% endblock %}

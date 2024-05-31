@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Completion Monitoring Chart</title>
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Project Completion Monitoring Chart</h1>
+    <canvas id="projectCompletionChart" width="800" height="400"></canvas>
+
+    <script>
+        // Fetch data from the server
+        fetch('/project-completion-data')
+            .then(response => response.json())
+            .then(data => {
+                // Prepare data for chart
+                const completionData = {
+                    labels: ['Completed', 'In Progress', 'Not Started'],
+                    datasets: [{
+                        label: 'Project Completion Status',
+                        data: [data.completed, data.in_progress, data.not_started],
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                            'rgba(255, 99, 132, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(255, 99, 132, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                };
+
+                // Get chart canvas
+                const ctx = document.getElementById('projectCompletionChart').getContext('2d');
+
+                // Create and render the chart
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: completionData,
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            });
+    </script>
+</body>
+</html>
